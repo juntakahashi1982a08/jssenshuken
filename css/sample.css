@@ -1,0 +1,400 @@
+table {
+  margin: 20px 3%;
+  border: 1px solid #8dc3f5;
+  width: 96%;
+}
+th {
+  font-size: 24px;
+  background-color: #d0e7fc;
+  border-bottom: 1px solid #8dc3f5;
+}
+td {
+  font-size: 20px;
+  background-color: rgb(241, 239, 239);
+  border-bottom: 1px solid #8dc3f5;
+}
+
+#title {
+  font-size: 100px;
+  font-family: fantasy;
+}
+
+#index {
+  text-align: center;
+}
+
+#startButton {
+  width: 200px;
+  height: 50px;
+  font-size: 30px;
+}
+
+#scoreButton {
+  width: 200px;
+  height: 50px;
+  font-size: 30px;
+}
+
+#name {
+  text-align: center;
+}
+
+#date {
+  text-align: center;
+}
+
+/* タイマー */
+
+body{
+  margin: 0;
+  padding: 0;
+  background: #fff5db;
+}
+
+.container{
+  margin:50px auto 0;
+  text-align: center;
+  width: 350px;
+}
+
+#timer{
+  margin: 30px auto;
+  font-size: 30px;
+  letter-spacing: 5px;
+}
+
+#btn{
+  display: flex;
+  list-style: none;
+  padding: 0;
+  justify-content: space-between;
+}
+
+.btn-item{
+  width: 100px;
+  border: 1px solid #000;
+  background: #eee;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-item:hover{
+  opacity: 0.2;
+  transition: 0.2s;
+}
+
+/* クイズ */
+
+.quiz {
+  min-height: 100vh;
+  padding: 100px 0;
+  background: #fff5db;
+}
+
+.quiz-content {
+  display: none;
+  border: 1px solid #222;
+  background-color: rgba(#fff, 0.4);
+  box-shadow: 2px 2px 4px rgba($color: #000, $alpha: 0.1);
+  position: relative;
+}
+
+.quiz-question-number {
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  border-bottom: 1px solid #222;
+  padding: 20px;
+}
+
+.quiz-question {
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1.8;
+  margin-bottom: 40px;
+  position: relative;
+  text-align: center;
+  padding: 30px 200px 0px;
+}
+
+.quiz-answer {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 0 200px 100px;
+  &::before {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    font-size: 200px;
+    opacity: 0.7;
+    top: -40px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    font-weight: bold;
+    line-height: 1;
+    text-align: center;
+    z-index: 2;
+    pointer-events: none;
+  }
+  &.is-correct {
+    .checked {
+      background: #ffb3b3;
+    }
+    &::before {
+      content: "〇";
+      color: #ffb3b3;
+      opacity: 0.5;
+    }
+  }
+  &.is-incorrect {
+    .checked {
+      background: #b3c7ff;
+    }
+    &::before {
+      content: "×";
+      color: #b3c7ff;
+    }
+  }
+  li {
+    position: relative;
+    list-style: none;
+    label {
+      color: #222;
+      display: block;
+      margin: 0 auto;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      width: relative;
+      padding: 4px 20px 4px 80px;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 1.16;
+      position: relative;
+      transition: 0.3s ease-in-out;
+      border: 1px solid #000;
+      white-space: pre-wrap;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      &.is-checked {
+        pointer-events: none;
+      }
+    }
+    &::after {
+      position: absolute;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      content: "";
+      width: 60px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      z-index: 1;
+      pointer-events: none;
+      border-right: 1px solid #000;
+    }
+    &:nth-child(1)::after {
+      content: "A";
+    }
+    &:nth-child(2)::after {
+      content: "B";
+    }
+    &:nth-child(3)::after {
+      content: "C";
+    }
+    &:nth-child(4)::after {
+      content: "D";
+    }
+  }
+}
+
+
+.finish {
+  display: none;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: rgba($color: #000000, $alpha: 0.6);
+  z-index: 3;
+  &.is-show {
+    display: flex;
+  }
+  .score-wrap {
+    text-align: center;
+    color: #fff;
+    .score {
+      font-size: 80px;
+      font-weight: bold;
+    }
+    .ja {
+      font-size: 34px;
+    }
+    .full {
+      font-size: 24px;
+    }
+  }
+  .goback-button {
+    font-size: 14px;
+    color: #fff;
+    margin-top: 30px;
+    display: inline-block;
+  }
+}
+
+/* チャート */
+
+/* .radar-chart-3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 230px;
+    height: 230px;
+    margin: 0 auto;
+    padding: 35px;
+    box-sizing: content-box;
+}
+
+.radar-chart-3 svg {
+    width: 100%;
+    height: 100%;
+}
+
+.radar-chart-3 dl {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.radar-chart-3 dl > div {
+    position: absolute;
+    color: #777;
+    font-size: .6em;
+    text-align: center;
+}
+
+.radar-chart-3 dl > div:nth-child(1) {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.radar-chart-3 dl > div:nth-child(2) {
+    top: 24%;
+    right: 10%;
+    transform: translateX(50%);
+}
+
+.radar-chart-3 dl > div:nth-child(3) {
+    bottom: 24%;
+    right: 10%;
+    transform: translateX(50%);
+}
+
+.radar-chart-3 dl > div:nth-child(4) {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.radar-chart-3 dl > div:nth-child(5) {
+    bottom: 24%;
+    left: 10%;
+    transform: translateX(-50%);
+}
+
+.radar-chart-3 dl > div:nth-child(6) {
+    top: 24%;
+    left: 10%;
+    transform: translateX(-50%);
+}
+
+.radar-chart-3 dd {
+    margin: 0;
+} */
+
+
+
+/* body {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font-size: 16px;
+}
+
+header {
+  /* background-color: darkblue; */
+/* border-bottom: 1px solid #ccc;
+  text-align: center; */
+/* color: #fff; */
+/* }
+
+main {
+  border-bottom: 1px solid #ccc;
+}
+
+h2{
+  font-size:16px;
+}
+
+p {
+  font-size: 100%;
+  text-align: center;
+  border-bottom: 1px solid #fff;
+  height: 100px;
+} */
+/* 
+ul {
+  padding: 0;
+  border-top: 1px solid #000000;
+  display: table;
+  /* 定義 */
+/* table-layout: fixed;
+  width: 100%;
+  } */
+
+/* li {
+  text-align: left;
+  vertical-align: top;
+  list-style-type: none;
+  border: 1px solid #666;
+  background-color: #FFF;
+  display: table-cell; */
+/* 定義 */
+/* cursor: pointer;
+} */
+
+/* li:hover {
+  background: #0066CC;
+  color: #fff;
+} */
+
+/* textarea{
+  margin: 3%;
+  width: 30%;
+  height: 30px;
+  font-size:50%;
+  box-shadow: 3px 3px 3px 3px #555;
+}
+
+#start{
+  text-align: center;
+} */

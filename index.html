@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/sample.css">
+  <title>Java Script 選手権（高橋）</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="js/jquery-3.5.1.min.js"></script>
+
+</head>
+
+<body>
+  <div id="index">
+
+    <header>
+      <h1 id="title">QUIZ GAME</h1><br>
+      <p>
+      </p>
+    </header>
+
+    <main>
+      <button id="startButton"><a href="quiz.html">スタート</a></button><br><br><br>
+      <button id="scoreButton"><a href="score.html">過去結果</a></button><br><br><br><br>
+      <button id="bgmon">BGM ON</button>
+    </div>
+  </main>
+
+  <script>
+
+    const bgm = new Audio('./main.mp3');
+    $("#bgmon").on('click', function () {
+      bgm.play();
+    });
+
+  </script>
+</body>
+
+</html>

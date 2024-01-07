@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/sample.css">
+  <title>Java Script 選手権（高橋）</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="js/jquery-3.5.1.min.js"></script>
+</head>
+
+<body>
+
+  <header>
+  </header>
+
+<main class="quiz">
+    <div class="inner-block">
+<div id="name">
+    名前: <input type="text" id="uname">
+</div>
+  <div id="date"></div>
+
+<div class="container">
+  <p id="timer">00分00秒</p>
+  <ul id="btn">
+    <li class="btn-item" id="start">スタート</li>
+    <li class="btn-item" id="stop">ストップ</li>
+  </ul>
+</div>
+
+      <div class="quiz-content">
+
+        <div class="finish">
+          <div class="score-wrap">
+            <span class="score">0</span>
+            <span class="ja">点</span>
+            <span class="full">／20点</span>
+          </div>
+          <a href="./quiz.html" class="goback-button">再チャレンジ</a>
+          <a href="./score.html" class="goback-button">結果を見る</a>
+          <a href="./index.html" class="goback-button">トップに戻る</a>
+        </div>
+
+        <div class="quiz-question-number"></div>
+        <h2 class="quiz-question"></h2>
+
+        <ul class="quiz-answer">
+          <li>
+            <label class="quiz-button button01">
+              <span class="quiz-text01"></span>
+            </label>
+          </li>
+          <li>
+            <label class="quiz-button button02">
+              <span class="quiz-text02"></span>
+            </label>
+          </li>
+          <li>
+            <label class="quiz-button button03">
+              <span class="quiz-text03"></span>
+            </label>
+          </li>
+          <li>
+            <label class="quiz-button button04">
+              <span class="quiz-text04"></span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+
+<script type="module">
+
+// BGM（追加）
+
+const music = new Audio('./quiz.mp3');
+
+// 効果音（追加）
+
+const seikaion = new Audio('./正解.mp3');
+const huseikaion = new Audio('./不正解.mp3');
+
+
+// 時間カウント（追加）
+
+$(document).ready(function() {
+  let setTimeoutId = undefined;
+  let startTime = 0;
+  let currentTime = 0;
+  let elapsedTime = 0;
+    
+  function runTimer(){
+    currentTime = Date.now();
+    showTime();
+    setTimeoutId = setTimeout(() => {
+      runTimer();
+    },1000)
+  }
+  
+  function showTime(){
+    let d = new Date(currentTime - startTime + elapsedTime);
+    const getMin = d.getMinutes();
+    const getSec =d.getSeconds();
+    $("#timer").text(`${String(getMin).padStart(2,'0')}分${String(getSec).padStart(2,'0')}秒`);
+  }
+
+  $("#start").on("click", function() {
+    $(".quiz-content").show();
+    startTime = Date.now();
+    runTimer();
+    music.play();
+    music.loop = true;
+  });
+
+$("#stop").on("click", function() {
+    elapsedTime += currentTime - startTime;
+    clearTimeout(setTimeoutId);
+    music.pause();
+  });
+});
+
+// 日付記録用
+const now = new Date;
+        $("#date").html(now.getFullYear() + "年" + (now.getMonth() + 1) + "月" + now.getDate() + "日" + now.getHours()
+            + "時" + now.getMinutes() + "分" + now.getSeconds() + "秒");
+
+   // クイズ関数
+ 
+    (function ($) {
+      'use strict';
+
+      //クイズリスト
+
+      const quizList = [
+      {
+          id: 1,
+          question: "「河豚」は何と読む？",
+          answer01: "ふぐ",
+          answer02: "しゃち",
+          answer03: "いるか",
+          answer04: "なまず",
+        },
+        {
+          id: 2,
+          question: "「鬱金香」は何と読む？",
+          answer01: "チューリップ",
+          answer02: "コスモス",
+          answer03: "ヒヤシンス",
+          answer04: "フリージア",
+        },
+        {
+          id: 3,
+          question: "「聖市」は何と読む？",
+          answer01: "サンパウロ",
+          answer02: "サンフランシスコ",
+          answer03: "サンクトペテルブルク",
+          answer04: "ヨハネスブルク",
+        },
+        {
+          id: 4,
+          question: "「笊」は何と読む？",
+          answer01: "ざる",
+          answer02: "かご",
+          answer03: "すのこ",
+          answer04: "すだれ",
+        },
+        {
+          id: 5,
+          question: "「鸚鵡」は何と読む？",
+          answer01: "おうむ",
+          answer02: "ふくろう",
+          answer03: "あほうどり",
+          answer04: "きつつき",
+        },
+        {
+          id: 6,
+          question: "クレーン車の「クレーン」とは何のこと？",
+          answer01: "ツル",
+          answer02: "キリン",
+          answer03: "カモ",
+          answer04: "ゾウ",
+        },
+        {
+          id: 7,
+          question: "こけらおとしの「こけら」とは何のこと？",
+          answer01: "木のくず",
+          answer02: "虫の死骸",
+          answer03: "布の切れ端",
+          answer04: "悪霊",
+        },
+        {
+          id: 8,
+          question: "「樹懶」は何と読む？",
+          answer01: "なまけもの",
+          answer02: "てん",
+          answer03: "あらいぐま",
+          answer04: "しょうじょう",
+        },
+        {
+          id: 9,
+          question: "絵画「夜警」の作者は？",
+          answer01: "レンブラント",
+          answer02: "フェルメール",
+          answer03: "ルーベンス",
+          answer04: "ブリューゲル",
+        },
+        {
+          id: 10,
+          question: "日本で最も売れたシングルCDは？",
+          answer01: "世界に一つだけの花",
+          answer02: "TSUNAMI",
+          answer03: "Automatic",
+          answer04: "SAY YES",
+        },
+        {
+          id: 11,
+          question: "日本のプロ野球で三冠王を取った回数が最も多いのは？",
+          answer01: "落合博満",
+          answer02: "ランディ・バース",
+          answer03: "王貞治",
+          answer04: "野村克也",
+        },
+        {
+          id: 12,
+          question: "アカデミー賞の司会を最も務めた人物は？",
+          answer01: "ボブ・ホープ",
+          answer02: "ウーピー・ゴールドバーグ",
+          answer03: "ビリー・クリスタル",
+          answer04: "ジョニー・カーソン",
+        },
+        {
+          id: 13,
+          question: "オリンピックで最も多く金メダルを獲得した人物は？",
+          answer01: "マイケル・フェルプス",
+          answer02: "加藤沢男",
+          answer03: "カール・ルイス",
+          answer04: "マーク・スピッツ",
+        },
+        {
+          id: 14,
+          question: "以下の「ドラゴンクエスト」の副題で最も古いのは？",
+          answer01: "そして伝説へ・・・",
+          answer02: "導かれし者たち",
+          answer03: "天空の花嫁",
+          answer04: "幻の大地",
+        },
+        {
+          id: 15,
+          question: "漫画「ドラゴンボール」単行本背表紙に2人いる人物は？",
+          answer01: "ヤジロベー",
+          answer02: "デンデ",
+          answer03: "占いババ",
+          answer04: "ランチ",
+        },
+        {
+          id: 16,
+          question: "葛飾北斎、ベートーベン、江戸川乱歩、といえば？",
+          answer01: "引越回数が多い",
+          answer02: "改名回数が多い",
+          answer03: "転職回数が多い",
+          answer04: "逮捕回数が多い",
+        },
+        {
+          id: 17,
+          question: "日本で唯一、親子で総理大臣を務めたのは？",
+          answer01: "福田康夫",
+          answer02: "麻生太郎",
+          answer03: "安倍晋三",
+          answer04: "鳩山由紀夫",
+        },
+        {
+          id: 18,
+          question: "徳川15代将軍の中で唯一、将軍と正室から生まれたのは？",
+          answer01: "徳川家光",
+          answer02: "徳川綱吉",
+          answer03: "徳川家定",
+          answer04: "徳川家宣",
+        },
+        {
+          id: 19,
+          question: "世界遺産を最も多く持つ国は？",
+          answer01: "イタリア",
+          answer02: "フランス",
+          answer03: "中国",
+          answer04: "スペイン",
+        },
+        {
+          id: 20,
+          question: "高層ビルとは何m以上の建物を言う？",
+          answer01: "30m",
+          answer02: "20m",
+          answer03: "40m",
+          answer04: "50m",
+        },
+        {
+          id: 21,
+          question: "世界で3番目に小さい国は？",
+          answer01: "ナウル",
+          answer02: "ツバル",
+          answer03: "リヒテンシュタイン",
+          answer04: "アンドラ",
+        },
+        {
+          id: 22,
+          question: "「ンクルマ」はどの国の初代大統領？",
+          answer01: "ガーナ",
+          answer02: "モロッコ",
+          answer03: "コロンビア",
+          answer04: "ベネズエラ",
+        },
+        {
+          id: 23,
+          question: "47都道府県で最後に分立してできた県は？",
+          answer01: "香川県",
+          answer02: "佐賀県",
+          answer03: "富山県",
+          answer04: "奈良県",
+        },
+        {
+          id: 24,
+          question: "長方形ではない国旗を持つ国は？",
+          answer01: "ネパール",
+          answer02: "ラオス",
+          answer03: "カタール",
+          answer04: "ケニア",
+        },
+        {
+          id: 25,
+          question: "xのy乗＝yのx乗を満たすx, yは？",
+          answer01: "2, 4",
+          answer02: "2, 3",
+          answer03: "3, 4",
+          answer04: "2, 8",
+        },
+        {
+          id: 26,
+          question: "16人のクラスで、同じ誕生日の組がいる確率は？",
+          answer01: "約38％",
+          answer02: "約58％",
+          answer03: "約78％",
+          answer04: "約18％",
+        },
+        {
+          id: 27,
+          question: "1から40の間に「3の倍数か3が付く数字」はいくつある？",
+          answer01: "21",
+          answer02: "22",
+          answer03: "23",
+          answer04: "24",
+        },
+        {
+          id: 28,
+          question: "1から100までを足すといくつ？",
+          answer01: "5050",
+          answer02: "5250",
+          answer03: "5550",
+          answer04: "5750",
+        },
+        {
+          id: 29,
+          question: "行きは分速100m、帰りは分速80mなら、往復の速さは？",
+          answer01: "分速88.8m",
+          answer02: "分速90m",
+          answer03: "分速91.1m",
+          answer04: "分速86.7m",
+        },
+        {
+          id: 30,
+          question: "元素記号が一文字で最も原子番号が大きい元素は？",
+          answer01: "タングステン",
+          answer02: "ヨウ素",
+          answer03: "イットリウム",
+          answer04: "ポロニウム",
+        },
+        {
+          id: 31,
+          question: "学名が「ニッポニア・ニッポン」の生き物は？",
+          answer01: "トキ",
+          answer02: "キジ",
+          answer03: "ゲンジボタル",
+          answer04: "イリオモテヤマネコ",
+        },
+        {
+          id: 32,
+          question: "地球の中心から最も離れた場所は何という山の山頂？",
+          answer01: "チンボラソ",
+          answer02: "アコンカグア",
+          answer03: "エルブルス",
+          answer04: "カンチェンジュンガ",
+        },
+      ];
+
+
+
+      //合計問題数と終了問題数（変更）
+      let $questionTotalNum = 15;
+
+      //質問をランダムにする
+      function shuffleQuiz(array) {
+        for (let i = (array.length - 1); 0 < i; i--) {
+          let random = Math.floor(Math.random() * (i + 1));
+          let selected = array[i];
+          array[i] = array[random];
+          array[random] = selected;
+        }
+        return array;
+      }
+
+      //1からxの配列を作成する（追加）
+      const range = (start, end) => [...new Array(end - start).keys()].map(n => n + start);
+      console.log(range(1, 33));
+
+      let quizId = range(1, 33);
+      console.log(quizId);
+      shuffleQuiz(quizId);
+
+      //現在の質問数
+      let $currentNum = 0;
+
+      //得点
+      let $pointPerCorrect = 1;
+
+      //クイズ関数
+      let questionObject = (function () {
+        let Obj = function ($target) {
+
+
+
+          //質問の番号
+          this.$questionNumber = $target.find('.quiz-question-number');
+
+          //質問文
+          this.$questionName = $target.find('.quiz-question');
+
+          //選択肢ボタン
+          this.$questionButton = $target.find('.quiz-button');
+          this.$button01 = $target.find('.button01');
+          this.$button02 = $target.find('.button02');
+          this.$button03 = $target.find('.button03');
+          this.$button04 = $target.find('.button04');
+
+          //選択肢のテキスト
+          this.$answer01 = $target.find('.quiz-text01');
+          this.$answer02 = $target.find('.quiz-text02');
+          this.$answer03 = $target.find('.quiz-text03');
+          this.$answer04 = $target.find('.quiz-text04');
+
+          //score
+          this.$score = $target.find('.score-wrap .score');
+
+          this.init();
+        };
+        Obj.prototype = {
+          //初回設定
+          init: function () {
+            //イベント登録
+            this.event();
+          },
+          event: function () {
+            let _this = this;
+            let score = 0;
+            console.log(score);
+            //ウインドウ読み込み時
+            $(window).on('load', function () {
+
+              //value取得
+              let value = quizId[$currentNum]; //最初は0（1番目）
+              //次の質問を取得
+              let nextQuestion = _this.searchQuestion(value);
+              //次の質問に切り替える
+              _this.changeQuestion(nextQuestion);
+              //回答のシャッフル
+              _this.shuffleAnswer($('.quiz-answer'));
+            });
+
+            //button クリック
+            this.$questionButton.on("click", function () {
+
+              if ($(this).hasClass('button01')) {
+                $(this).parents('.quiz-answer').addClass('is-correct');
+                score = score + $pointPerCorrect;
+                seikaion.play();
+                console.log(score);
+              } else {
+                $(this).parents('.quiz-answer').addClass('is-incorrect');
+                huseikaion.play();
+              }
+
+
+
+              $(this).addClass('is-checked');
+
+              if ($currentNum + 1 == $questionTotalNum) {
+                setTimeout(function () {
+                  $('.finish').addClass('is-show');
+                  $('.score-wrap .score').text(score);
+                }, 500);
+              } else {
+                setTimeout(function () {
+                  //現在の数字の更新
+                  $currentNum = $currentNum + 1;
+
+                  //次の質問番号を取得
+                  let value = quizId[$currentNum];
+
+                  //次の質問を取得
+                  let nextQuestion = _this.searchQuestion(value);
+
+                  //次の質問に切り替える
+                  _this.changeQuestion(nextQuestion);
+
+                  //クラスを取る
+                  _this.$questionButton.removeClass('is-checked');
+                  $('.quiz-answer').removeClass('is-correct').removeClass('is-incorrect');
+
+                  //回答のシャッフル
+                  _this.shuffleAnswer($('.quiz-answer'));
+
+                }, 500);
+              }
+              return false;
+          
+            });
+          },
+          searchQuestion: function (questionId) {
+            let nextQuestion = null;
+            quizList.forEach(function (item) {
+              if (item.id == questionId) {
+                nextQuestion = item;
+              }
+            });
+            return nextQuestion;
+          },
+          changeQuestion: function (nextQuestion) {
+            let _this = this;
+
+            //質問文の入れ替え
+            _this.$questionName.text(nextQuestion.question);
+
+            //質問番号を1つ増やす
+            let numPlusOne = $currentNum + 1;
+            _this.$questionNumber.text(numPlusOne + '問目');
+
+            //選択肢のテキストの入れ替え
+            _this.$answer01.text(nextQuestion.answer01);
+            _this.$answer02.text(nextQuestion.answer02);
+            _this.$answer03.text(nextQuestion.answer03);
+            _this.$answer04.text(nextQuestion.answer04);
+          },
+          shuffleAnswer: function (container) {
+            let content = container.find("> *");
+            let total = content.length;
+            content.each(function () {
+              content.eq(Math.floor(Math.random() * total)).prependTo(container);
+            });
+          },
+        };
+        return Obj;
+})();
+
+      let quiz = $('.quiz');
+      if (quiz[0]) {
+        let queInstance = new questionObject(quiz);
+      }
+
+    })(jQuery);
+
+// firebase
+
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    import { getDatabase, ref, push, set, onChildAdded, update, remove, onChildChanged, onChildRemoved }
+      from "https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "",
+      // API KEY(takahasi koyuu)はGITHUBでははずす
+      authDomain: "jssenshuken.firebaseapp.com",
+      projectId: "jssenshuken",
+      storageBucket: "jssenshuken.appspot.com",
+      messagingSenderId: "271826821828",
+      appId: "1:271826821828:web:90fad58b89bb184d90df91"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    // Initialize Realtime Database and get a reference to the service
+    const database = getDatabase(app);
+    const dbRef = ref(database, "jssenshuken");
+
+    $(".goback-button").on("click", function () {
+            const msg = {
+                uname: $("#uname").val(),
+                score: $(".score").text(),
+                timer: $("#timer").text(),
+                date: $("#date").text()
+            };
+            const newPostRef = push(dbRef);
+            set(newPostRef, msg);
+        });
+
+        
+  </script>
+</body>
+
+</html>
